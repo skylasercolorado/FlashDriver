@@ -9,6 +9,10 @@ using namespace Camax;
 
 bool FlashDriver::Program(ioAddress address, ioData data)
 {
+    io_.IoWrite(FlashRegisters::Control, FlashCommands::Write);
     io_.IoWrite(address, data);
+    io_.IoRead(FlashRegisters::Control);
+    io_.IoRead(address);
+
     return true;
 }
