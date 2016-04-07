@@ -11,8 +11,8 @@ bool FlashDriver::Program(ioAddress address, ioData data)
 {
     io_.IoWrite(FlashRegisters::Control, FlashCommands::Write);
     io_.IoWrite(address, data);
-    io_.IoRead(FlashRegisters::Control);
-    io_.IoRead(address);
-
-    return true;
+    if (io_.IoRead(FlashRegisters::Control) == FlashStatus::Ready)
+        return io_.IoRead(address) == data ? true : false;
+    else
+        return false;
 }
