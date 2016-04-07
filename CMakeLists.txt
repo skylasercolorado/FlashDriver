@@ -59,6 +59,5 @@ target_link_libraries(${TEST_RUNNER} "pthread")
 target_link_libraries(${TEST_RUNNER} "gmock_main")
 target_link_libraries(${TEST_RUNNER} "gmock")
 target_link_libraries(${TEST_RUNNER} "gtest")
-#target_link_libraries(${TEST_RUNNER} "gtest_main")
 target_link_libraries(${TEST_RUNNER} ${PROJ_LIB})
 
