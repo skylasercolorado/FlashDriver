@@ -12,12 +12,12 @@ namespace Camax
     class FlashDriver
     {
     public:
-        FlashDriver(IIo &io) : io_(io) {}
+        //FlashDriver(IIo &io) : io_(io) {}
         ~FlashDriver() {}
         bool Program(ioAddress address, ioData data);
 
     private:
-        IIo &io_;
+        //IIo &io_;
     };
 }
 #endif //FLASHDRIVER_FLASHDRIVER_HPP
