@@ -14,6 +14,8 @@ namespace Camax
 
     class IIo
     {
+    public:
+        virtual ~IIo() {}
         virtual ioData IoRead(ioAddress offset) = 0;
         virtual void IoWrite(ioAddress offset, ioData data) = 0;
     };

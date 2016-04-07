@@ -8,11 +8,13 @@
 #include "gmock/gmock.h"
 
 using namespace Camax;
+using ::testing::AtLeast;
 
 class FlashDriverProgramTest : public ::testing::Test
 {
 public:
-    FlashDriverProgramTest() {}
+    FlashDriverProgramTest() : flashDriver_(ioMock_)
+    {}
 
     virtual void SetUp()
     {}
@@ -20,11 +22,14 @@ public:
     virtual void TearDown()
     {}
 
-private:
     IoMock ioMock_;
+    FlashDriver flashDriver_;
 };
 
 TEST_F(FlashDriverProgramTest, one)
 {
-    EXPECT_TRUE(true);
+    EXPECT_CALL(ioMock_, IoWrite(0x01, 0x02))
+            .Times(AtLeast(1));
+
+    flashDriver_.Program(0x01, 0x02);
 }
