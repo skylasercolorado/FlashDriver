@@ -13,8 +13,6 @@ namespace Camax
     class IoMock : public IIo
     {
     public:
-        //virtual ioData IoRead(ioAddress offset);
-        //virtual void IoWrite(ioAddress offset, ioData data);
 
         MOCK_METHOD1(IoRead, ioData(ioAddress offset));
         MOCK_METHOD2(IoWrite, void(ioAddress offset, ioData data));

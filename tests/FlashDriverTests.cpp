@@ -2,6 +2,8 @@
 // Created by duncan on 4/6/16.
 //
 
+#include <FlashDriver.hpp>
+#include <IoMock.hpp>
 #include "gtest/gtest.h"
 #include "gmock/gmock.h"
 
@@ -24,5 +26,5 @@ private:
 
 TEST_F(FlashDriverProgramTest, one)
 {
-
+    EXPECT_TRUE(true);
 }
