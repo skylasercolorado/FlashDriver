@@ -37,10 +37,10 @@ TEST_F(FlashDriverProgramTest, one)
 
 TEST_F(FlashDriverProgramTest, WriteSucceeds_ReadyImmediately)
 {
-    EXPECT_CALL(ioMock_, IoWrite(0, 0x40));
+    EXPECT_CALL(ioMock_, IoWrite(FlashRegisters::Control, FlashCommands::Write));
     EXPECT_CALL(ioMock_, IoWrite(0x1000, 0xBEEF));
-    EXPECT_CALL(ioMock_, IoRead(0))
-                .WillOnce(Return(1<<7));
+    EXPECT_CALL(ioMock_, IoRead(FlashRegisters::Control))
+                .WillOnce(Return(FlashStatus::Ready));
     EXPECT_CALL(ioMock_, IoRead(0x1000))
                 .WillOnce(Return(0xBEEF));
 

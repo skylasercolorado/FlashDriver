@@ -12,6 +12,24 @@ namespace Camax
     typedef uint32_t ioAddress;
     typedef uint16_t ioData;
 
+    enum FlashRegisters : ioAddress
+    {
+        Control             = 0
+    };
+
+    enum FlashCommands : ioData
+    {
+        Write               = 0x40
+    };
+
+    enum FlashStatus : ioData
+    {
+        Ready               = 1 << 7,
+        VppError            = 1 << 3,
+        ProgramError        = 1 << 4,
+        ProtectedBlockError = 1 << 1
+    };
+
     class IIo
     {
     public:
