@@ -14,7 +14,8 @@ namespace Camax
 
     enum FlashRegisters : ioAddress
     {
-        Control             = 0
+        Control             = 0,
+        Status              = 0
     };
 
     enum FlashCommands : ioData
@@ -27,7 +28,8 @@ namespace Camax
         Ready               = 1 << 7,
         VppError            = 1 << 3,
         ProgramError        = 1 << 4,
-        ProtectedBlockError = 1 << 1
+        ProtectedBlockError = 1 << 1,
+        Undefined           = 0
     };
 
     class IIo
