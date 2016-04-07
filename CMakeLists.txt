@@ -55,7 +55,7 @@ target_link_libraries(${APPLICATION} ${PROJ_LIB})
 # Create the Google Test Runner, with Google Test's libraries
 # and this project's source library
 add_executable(${TEST_RUNNER} ${TEST_FILES} ${MOCK_SRC_FILES} ${INC_FILES} ${MOCK_INC_FILES})
-target_link_libraries(${TEST_RUNNER} "pthread")
+target_link_libraries(${TEST_RUNNER} "pthread") # The order of these libraries is very important!!!. Do not change!!
 target_link_libraries(${TEST_RUNNER} "gmock_main")
 target_link_libraries(${TEST_RUNNER} "gmock")
 target_link_libraries(${TEST_RUNNER} "gtest")

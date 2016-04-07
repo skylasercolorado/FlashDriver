@@ -9,6 +9,7 @@
 
 using namespace Camax;
 using ::testing::AtLeast;
+using ::testing::Return;
 
 class FlashDriverProgramTest : public ::testing::Test
 {
@@ -32,4 +33,16 @@ TEST_F(FlashDriverProgramTest, one)
             .Times(AtLeast(1));
 
     EXPECT_TRUE(flashDriver_.Program(0x01, 0x02));
+}
+
+TEST_F(FlashDriverProgramTest, WriteSucceeds_ReadyImmediately)
+{
+    EXPECT_CALL(ioMock_, IoWrite(0, 0x40));
+    EXPECT_CALL(ioMock_, IoWrite(0x1000, 0xBEEF));
+    EXPECT_CALL(ioMock_, IoRead(0))
+                .WillOnce(Return(1<<7));
+    EXPECT_CALL(ioMock_, IoRead(0x1000))
+                .WillOnce(Return(0xBEEF));
+
+    EXPECT_TRUE(flashDriver_.Program(0x1000, 0xBEEF));
 }
