@@ -14,7 +14,7 @@ namespace Camax
     public:
         FlashDriver(IIo &io) : io_(io) {}
         ~FlashDriver() {}
-        bool Program(ioAddress address, ioData data);
+        FlashResult Program(ioAddress address, ioData data);
 
     private:
         IIo &io_;

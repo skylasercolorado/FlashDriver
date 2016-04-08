@@ -7,7 +7,7 @@
 using namespace Camax;
 
 
-bool FlashDriver::Program(ioAddress address, ioData data)
+FlashResult FlashDriver::Program(ioAddress address, ioData data)
 {
     ioData status;
 
@@ -19,8 +19,8 @@ bool FlashDriver::Program(ioAddress address, ioData data)
     if(status & FlashStatus::VppError)
     {
         io_.IoWrite(FlashRegisters::Control, FlashCommands::Reset);
-        return false;
+        return FlashResult::Vpp_Error;
     }
 
-    return io_.IoRead(address) == data ? true : false;
+    return io_.IoRead(address) == data ? FlashResult::Success : FlashResult::Unknown_Error;
 }

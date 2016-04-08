@@ -36,7 +36,7 @@ TEST_F(FlashDriverProgramTest, WriteSucceeds_ReadyImmediately)
     EXPECT_CALL(ioMock_, IoRead(0x1000))
                 .WillOnce(Return(0xBEEF));
 
-    EXPECT_TRUE(flashDriver_.Program(0x1000, 0xBEEF));
+    EXPECT_EQ(FlashResult::Success, flashDriver_.Program(0x1000, 0xBEEF));
 }
 
 TEST_F(FlashDriverProgramTest, WriteSucceeds_NotReadyImmediately)
@@ -52,7 +52,7 @@ TEST_F(FlashDriverProgramTest, WriteSucceeds_NotReadyImmediately)
 
     EXPECT_CALL(ioMock_, IoRead(0x1000)).WillOnce(Return(0xBEEF));
 
-    EXPECT_TRUE(flashDriver_.Program(0x1000, 0xBEEF));
+    EXPECT_EQ(FlashResult::Success, flashDriver_.Program(0x1000, 0xBEEF));
 }
 
 TEST_F(FlashDriverProgramTest, WriteFailsVppError)
@@ -65,5 +65,5 @@ TEST_F(FlashDriverProgramTest, WriteFailsVppError)
 
     EXPECT_CALL(ioMock_, IoWrite(FlashRegisters::Control, FlashCommands::Reset));
 
-    EXPECT_FALSE(flashDriver_.Program(0x1000, 0xBEEF));
+    EXPECT_EQ(FlashResult::Vpp_Error, flashDriver_.Program(0x1000, 0xBEEF));
 }

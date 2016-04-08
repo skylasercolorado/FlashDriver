@@ -33,6 +33,15 @@ namespace Camax
         Undefined           = 0
     };
 
+    enum FlashResult
+    {
+        Success,
+        Vpp_Error,
+        Program_Error,
+        ProtectedBlock_Error,
+        Unknown_Error
+    };
+
     class IIo
     {
     public:
