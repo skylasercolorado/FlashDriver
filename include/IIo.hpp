@@ -39,7 +39,8 @@ namespace Camax
         Vpp_Error,
         Program_Error,
         ProtectedBlock_Error,
-        Unknown_Error
+        Unknown_Error,
+        ReadBack_Error
     };
 
     class IIo

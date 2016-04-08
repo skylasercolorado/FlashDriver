@@ -25,7 +25,9 @@ FlashResult FlashDriver::Program(ioAddress address, ioData data)
             return FlashResult::Program_Error;
         else if(status & FlashStatus::ProtectedBlockError)
             return FlashResult::ProtectedBlock_Error;
+        else
+            return FlashResult::Unknown_Error;
     }
 
-    return io_.IoRead(address) == data ? FlashResult::Success : FlashResult::Unknown_Error;
+    return io_.IoRead(address) == data ? FlashResult::Success : FlashResult::ReadBack_Error;
 }
