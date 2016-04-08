@@ -143,7 +143,8 @@ TEST_F(FlashDriverProgramTest, WriteSucceeds_IgnoresOtherBitsUntilReady)
 TEST_F(FlashDriverProgramTest, GetTimeTest)
 {
     OsTime::initializeTime(0, 250);
-    std::cout << "\n The Time is: " << OsTime::GetMicroSeconds() << " us \n";
-    std::cout << "\n The Time is: " << OsTime::GetMicroSeconds() << " us \n";
-    std::cout << "\n The Time is: " << OsTime::GetMicroSeconds() << " us \n";
+
+    EXPECT_EQ(0, OsTime::GetMicroSeconds());
+    EXPECT_EQ(250, OsTime::GetMicroSeconds());
+    EXPECT_EQ(500, OsTime::GetMicroSeconds());
 }
