@@ -20,6 +20,6 @@ uint64_t OsTime::GetMicroSeconds()
 void OsTime::initializeTime(uint64_t initialMicroSeconds, uint64_t incrementMicroSeconds)
 {
     incrementMicroSeconds_ = incrementMicroSeconds;
-    microSeconds_ = initialMicroSeconds;
+    initialMicroSeconds_ = initialMicroSeconds;
 }
 

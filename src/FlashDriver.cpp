@@ -3,6 +3,7 @@
 //
 
 #include <FlashDriver.hpp>
+#include <OsTime.hpp>
 
 using namespace Camax;
 
@@ -13,7 +14,11 @@ FlashResult FlashDriver::Program(ioAddress address, ioData data)
     io_.IoWrite(FlashRegisters::Control, FlashCommands::Write);
     io_.IoWrite(address, data);
 
-    while(!((status = io_.IoRead(FlashRegisters::Status)) & FlashStatus::Ready));
+    uint64_t startTime = OsTime::GetMicroSeconds();
+
+    while(!((status = io_.IoRead(FlashRegisters::Status)) & FlashStatus::Ready))
+        if(OsTime::GetMicroSeconds() - startTime >= Timeout)
+            return FlashResult::Timeout_Error;
 
     if(status & ~FlashStatus::Ready)
         return processError(status, io_);
