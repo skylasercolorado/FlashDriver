@@ -16,20 +16,16 @@ FlashResult FlashDriver::Program(ioAddress address, ioData data)
 
     while(!((status = io_.IoRead(FlashRegisters::Status)) & FlashStatus::Ready));
 
-    if(status & FlashStatus::VppError)
+    if(status & ~FlashStatus::Ready)
     {
         io_.IoWrite(FlashRegisters::Control, FlashCommands::Reset);
-        return FlashResult::Vpp_Error;
-    }
-    else if(status & FlashStatus::ProgramError)
-    {
-        io_.IoWrite(FlashRegisters::Control, FlashCommands::Reset);
-        return FlashResult::Program_Error;
-    }
-    else if(status & FlashStatus::ProtectedBlockError)
-    {
-        io_.IoWrite(FlashRegisters::Control, FlashCommands::Reset);
-        return FlashResult::ProtectedBlock_Error;
+
+        if(status & FlashStatus::VppError)
+            return FlashResult::Vpp_Error;
+        else if(status & FlashStatus::ProgramError)
+            return FlashResult::Program_Error;
+        else if(status & FlashStatus::ProtectedBlockError)
+            return FlashResult::ProtectedBlock_Error;
     }
 
     return io_.IoRead(address) == data ? FlashResult::Success : FlashResult::Unknown_Error;
