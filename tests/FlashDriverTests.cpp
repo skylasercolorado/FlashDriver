@@ -148,3 +148,13 @@ TEST_F(FlashDriverProgramTest, GetTimeTest)
     EXPECT_EQ(250, OsTime::GetMicroSeconds());
     EXPECT_EQ(500, OsTime::GetMicroSeconds());
 }
+
+TEST_F(FlashDriverProgramTest, WriteFails_Timeout)
+{
+    EXPECT_CALL(ioMock_, IoWrite(FlashRegisters::Control, FlashCommands::Write));
+    EXPECT_CALL(ioMock_, IoWrite(address_, data_));
+    EXPECT_CALL(ioMock_, IoRead(FlashRegisters::Status))
+            .WillRepeatedly(Return(~FlashStatus::Ready));
+
+    EXPECT_EQ(FlashResult::Timeout_Error, flashDriver_.Program(address_, data_));
+}
