@@ -20,7 +20,8 @@ namespace Camax
 
     enum FlashCommands : ioData
     {
-        Write               = 0x40
+        Write               = 0x40,
+        Reset               = 0xFF
     };
 
     enum FlashStatus : ioData
