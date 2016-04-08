@@ -99,6 +99,19 @@ TEST_F(FlashDriverProgramTest, WriteFailsProtectedBlockError)
     EXPECT_EQ(FlashResult::ProtectedBlock_Error, flashDriver_.Program(address_, data_));
 }
 
+TEST_F(FlashDriverProgramTest, WriteFailsUnknownBlockError)
+{
+    EXPECT_CALL(ioMock_, IoWrite(FlashRegisters::Control, FlashCommands::Write));
+    EXPECT_CALL(ioMock_, IoWrite(address_, data_));
+
+    EXPECT_CALL(ioMock_, IoRead(FlashRegisters::Status))
+            .WillOnce(Return(FlashStatus::Unknown | FlashStatus::Ready));
+
+    EXPECT_CALL(ioMock_, IoWrite(FlashRegisters::Control, FlashCommands::Reset));
+
+    EXPECT_EQ(FlashResult::Unknown_Error, flashDriver_.Program(address_, data_));
+}
+
 TEST_F(FlashDriverProgramTest, WriteFailsReadBackError)
 {
     EXPECT_CALL(ioMock_, IoWrite(FlashRegisters::Control, FlashCommands::Write));

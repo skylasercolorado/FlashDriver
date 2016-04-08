@@ -30,6 +30,7 @@ namespace Camax
         VppError            = 1 << 3,
         ProgramError        = 1 << 4,
         ProtectedBlockError = 1 << 1,
+        Unknown             = 1 << 10,
         Undefined           = 0
     };
 
