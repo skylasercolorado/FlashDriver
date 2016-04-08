@@ -4,6 +4,7 @@
 
 #include <FlashDriver.hpp>
 #include <IoMock.hpp>
+#include <OsTime.hpp>
 #include "gtest/gtest.h"
 #include "gmock/gmock.h"
 
@@ -137,4 +138,9 @@ TEST_F(FlashDriverProgramTest, WriteSucceeds_IgnoresOtherBitsUntilReady)
             .WillOnce(Return(data_));
 
     EXPECT_EQ(FlashResult::Success, flashDriver_.Program(address_, data_));
+}
+
+TEST_F(FlashDriverProgramTest, GetTimeTest)
+{
+    std::cout << "\n The Time is: " << OsTime::GetMicroSeconds() << "us \n";
 }
