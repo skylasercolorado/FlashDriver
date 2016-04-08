@@ -6,7 +6,6 @@
 
 using namespace Camax;
 
-
 FlashResult FlashDriver::Program(ioAddress address, ioData data)
 {
     ioData status;

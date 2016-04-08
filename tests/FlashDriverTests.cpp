@@ -18,31 +18,36 @@ public:
     {}
 
     virtual void SetUp()
-    {}
+    {
+        address_ = 0x1000;
+        data_ = 0xBEEF;
+    }
 
     virtual void TearDown()
     {}
 
     IoMock ioMock_;
     FlashDriver flashDriver_;
+    ioAddress address_;
+    ioData data_;
 };
 
 TEST_F(FlashDriverProgramTest, WriteSucceeds_ReadyImmediately)
 {
     EXPECT_CALL(ioMock_, IoWrite(FlashRegisters::Control, FlashCommands::Write));
-    EXPECT_CALL(ioMock_, IoWrite(0x1000, 0xBEEF));
+    EXPECT_CALL(ioMock_, IoWrite(address_, data_));
     EXPECT_CALL(ioMock_, IoRead(FlashRegisters::Status))
                 .WillOnce(Return(FlashStatus::Ready));
-    EXPECT_CALL(ioMock_, IoRead(0x1000))
-                .WillOnce(Return(0xBEEF));
+    EXPECT_CALL(ioMock_, IoRead(address_))
+                .WillOnce(Return(data_));
 
-    EXPECT_EQ(FlashResult::Success, flashDriver_.Program(0x1000, 0xBEEF));
+    EXPECT_EQ(FlashResult::Success, flashDriver_.Program(address_, data_));
 }
 
 TEST_F(FlashDriverProgramTest, WriteSucceeds_NotReadyImmediately)
 {
     EXPECT_CALL(ioMock_, IoWrite(FlashRegisters::Control, FlashCommands::Write));
-    EXPECT_CALL(ioMock_, IoWrite(0x1000, 0xBEEF));
+    EXPECT_CALL(ioMock_, IoWrite(address_, data_));
 
     EXPECT_CALL(ioMock_, IoRead(FlashRegisters::Status))
             .WillOnce(Return(FlashStatus::Undefined))
@@ -50,60 +55,60 @@ TEST_F(FlashDriverProgramTest, WriteSucceeds_NotReadyImmediately)
             .WillOnce(Return(FlashStatus::Undefined))
             .WillOnce(Return(FlashStatus::Ready));
 
-    EXPECT_CALL(ioMock_, IoRead(0x1000)).WillOnce(Return(0xBEEF));
+    EXPECT_CALL(ioMock_, IoRead(address_)).WillOnce(Return(data_));
 
-    EXPECT_EQ(FlashResult::Success, flashDriver_.Program(0x1000, 0xBEEF));
+    EXPECT_EQ(FlashResult::Success, flashDriver_.Program(address_, data_));
 }
 
 TEST_F(FlashDriverProgramTest, WriteFailsVppError)
 {
     EXPECT_CALL(ioMock_, IoWrite(FlashRegisters::Control, FlashCommands::Write));
-    EXPECT_CALL(ioMock_, IoWrite(0x1000, 0xBEEF));
+    EXPECT_CALL(ioMock_, IoWrite(address_, data_));
 
     EXPECT_CALL(ioMock_, IoRead(FlashRegisters::Status))
             .WillOnce(Return(FlashStatus::VppError | FlashStatus::Ready));
 
     EXPECT_CALL(ioMock_, IoWrite(FlashRegisters::Control, FlashCommands::Reset));
 
-    EXPECT_EQ(FlashResult::Vpp_Error, flashDriver_.Program(0x1000, 0xBEEF));
+    EXPECT_EQ(FlashResult::Vpp_Error, flashDriver_.Program(address_, data_));
 }
 
 TEST_F(FlashDriverProgramTest, WriteFailsProgramError)
 {
     EXPECT_CALL(ioMock_, IoWrite(FlashRegisters::Control, FlashCommands::Write));
-    EXPECT_CALL(ioMock_, IoWrite(0x1000, 0xBEEF));
+    EXPECT_CALL(ioMock_, IoWrite(address_, data_));
 
     EXPECT_CALL(ioMock_, IoRead(FlashRegisters::Status))
             .WillOnce(Return(FlashStatus::ProgramError | FlashStatus::Ready));
 
     EXPECT_CALL(ioMock_, IoWrite(FlashRegisters::Control, FlashCommands::Reset));
 
-    EXPECT_EQ(FlashResult::Program_Error, flashDriver_.Program(0x1000, 0xBEEF));
+    EXPECT_EQ(FlashResult::Program_Error, flashDriver_.Program(address_, data_));
 }
 
 TEST_F(FlashDriverProgramTest, WriteFailsProtectedBlockError)
 {
     EXPECT_CALL(ioMock_, IoWrite(FlashRegisters::Control, FlashCommands::Write));
-    EXPECT_CALL(ioMock_, IoWrite(0x1000, 0xBEEF));
+    EXPECT_CALL(ioMock_, IoWrite(address_, data_));
 
     EXPECT_CALL(ioMock_, IoRead(FlashRegisters::Status))
             .WillOnce(Return(FlashStatus::ProtectedBlockError | FlashStatus::Ready));
 
     EXPECT_CALL(ioMock_, IoWrite(FlashRegisters::Control, FlashCommands::Reset));
 
-    EXPECT_EQ(FlashResult::ProtectedBlock_Error, flashDriver_.Program(0x1000, 0xBEEF));
+    EXPECT_EQ(FlashResult::ProtectedBlock_Error, flashDriver_.Program(address_, data_));
 }
 
 TEST_F(FlashDriverProgramTest, WriteFailsUnknownError)
 {
     EXPECT_CALL(ioMock_, IoWrite(FlashRegisters::Control, FlashCommands::Write));
-    EXPECT_CALL(ioMock_, IoWrite(0x1000, 0xBEEF));
+    EXPECT_CALL(ioMock_, IoWrite(address_, data_));
 
     EXPECT_CALL(ioMock_, IoRead(FlashRegisters::Status))
             .WillOnce(Return(FlashStatus::Ready));
 
-    EXPECT_CALL(ioMock_, IoRead(0x1000))
-                .WillOnce(Return(0xBAAD));
+    EXPECT_CALL(ioMock_, IoRead(address_))
+                .WillOnce(Return(data_ - 1));
 
-    EXPECT_EQ(FlashResult::Unknown_Error, flashDriver_.Program(0x1000, 0xBEEF));
+    EXPECT_EQ(FlashResult::Unknown_Error, flashDriver_.Program(address_, data_));
 }
