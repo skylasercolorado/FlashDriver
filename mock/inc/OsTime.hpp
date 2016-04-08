@@ -5,15 +5,13 @@
 #ifndef FLASHDRIVER_OSTIME_HPP
 #define FLASHDRIVER_OSTIME_HPP
 
-#include <IOsTime.hpp>
-
 // This is a stub (link time).
 namespace Camax
 {
-    class OsTime : public IOsTime
+    class OsTime
     {
     public:
-        virtual uint64_t GetMicroSeconds();
+        static uint64_t GetMicroSeconds();
         static void initializeTime(uint64_t initialMicroSeconds, uint64_t incrementMicroSeconds);
 
     private:

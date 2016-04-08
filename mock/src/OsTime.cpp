@@ -12,7 +12,9 @@ uint64_t OsTime::incrementMicroSeconds_ = 500;
 
 uint64_t OsTime::GetMicroSeconds()
 {
-    return (microSeconds_ += incrementMicroSeconds_);
+    microSeconds_ = initialMicroSeconds_;
+    initialMicroSeconds_ += incrementMicroSeconds_;
+    return (microSeconds_);
 }
 
 void OsTime::initializeTime(uint64_t initialMicroSeconds, uint64_t incrementMicroSeconds)
