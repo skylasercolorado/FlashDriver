@@ -125,3 +125,16 @@ TEST_F(FlashDriverProgramTest, WriteFailsReadBackError)
 
     EXPECT_EQ(FlashResult::ReadBack_Error, flashDriver_.Program(address_, data_));
 }
+
+TEST_F(FlashDriverProgramTest, WriteSucceeds_IgnoresOtherBitsUntilReady)
+{
+    EXPECT_CALL(ioMock_, IoWrite(FlashRegisters::Control, FlashCommands::Write));
+    EXPECT_CALL(ioMock_, IoWrite(address_, data_));
+    EXPECT_CALL(ioMock_, IoRead(FlashRegisters::Status))
+            .WillOnce(Return(~FlashStatus::Ready))
+            .WillOnce(Return(FlashStatus::Ready));
+    EXPECT_CALL(ioMock_, IoRead(address_))
+            .WillOnce(Return(data_));
+
+    EXPECT_EQ(FlashResult::Success, flashDriver_.Program(address_, data_));
+}
