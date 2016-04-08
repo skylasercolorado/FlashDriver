@@ -18,6 +18,7 @@ namespace Camax
 
     private:
         IIo &io_;
+        FlashResult ProcessError(ioData &status, IIo &io);
     };
 }
 #endif //FLASHDRIVER_FLASHDRIVER_HPP
