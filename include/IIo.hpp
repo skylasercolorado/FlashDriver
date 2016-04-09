@@ -21,7 +21,8 @@ namespace Camax
     enum FlashCommands : ioData
     {
         Write               = 0x40,
-        Reset               = 0xFF
+        Reset               = 0xFF,
+        CfiQuery            = 0x98
     };
 
     enum FlashStatus : ioData

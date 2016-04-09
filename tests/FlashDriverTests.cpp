@@ -177,3 +177,26 @@ TEST_F(FlashDriverProgramTest, WriteFails_TimeoutAtEndOfTime)
 
     EXPECT_EQ(FlashResult::Timeout_Error, flashDriver_.Program(address_, data_));
 }
+using ::testing::_;
+using ::testing::Invoke;
+
+TEST_F(FlashDriverProgramTest, ReturnMaps)
+{
+    typedef std::map<ioAddress, ioData> CfiData;
+
+    CfiData cfiData;
+
+    cfiData.insert(std::make_pair<ioAddress, ioData>(0, 10));
+    cfiData.insert(std::make_pair<ioAddress, ioData>(1, 20));
+    cfiData.insert(std::make_pair<ioAddress, ioData>(2, 30));
+
+    EXPECT_CALL(ioMock_, IoWrite(FlashRegisters::Control, FlashCommands::CfiQuery));
+    EXPECT_CALL(ioMock_, IoRead(_))
+            .WillRepeatedly(Invoke([&](ioAddress address)
+                                   {
+                                       return cfiData.find(address)->second;
+                                   }
+            ));
+
+    EXPECT_EQ(10, flashDriver_.CfiQuery(0));
+}

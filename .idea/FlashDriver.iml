@@ -8,7 +8,6 @@
       <sourceFolder url="file://$MODULE_DIR$/mock/src/OsTime.cpp" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/mock/inc/OsTime.hpp" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/mock/inc/IoMock.hpp" isTestSource="false" />
-      <sourceFolder url="file://$MODULE_DIR$/include/IOsTime.hpp" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/include/IIo.hpp" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/include/FlashDriver.hpp" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/app/app.cpp" isTestSource="false" />
