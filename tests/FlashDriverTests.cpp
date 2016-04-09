@@ -198,14 +198,14 @@ TEST_F(FlashDriverProgramTest, ReturnMaps)
 
     EXPECT_CALL(ioMock_, IoWrite(FlashRegisters::Control, FlashCommands::CfiQuery));
     EXPECT_CALL(ioMock_, IoRead(_))
-//            .WillRepeatedly(WithArgs<0>(Invoke([&](ioAddress address)
-//                                   {
-//                                       return cfiData.find(_)->second;
-//                                   }
-//            )));
-            .WillOnce(Invoke(dummy));
+            .WillRepeatedly(WithArgs<0>(Invoke([&](ioAddress address)
+                                   {
+                                       return cfiData.find(address)->second;
+                                   }
+            )));
+//            .WillOnce(Invoke(dummy));
 
 //    EXPECT_EQ(10, flashDriver_.CfiQuery(0));
 //    EXPECT_EQ(20, flashDriver_.CfiQuery(1));
-    EXPECT_EQ(7, flashDriver_.CfiQuery(2));
+    EXPECT_EQ(30, flashDriver_.CfiQuery(2));
 }
