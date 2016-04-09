@@ -164,7 +164,7 @@ TEST_F(FlashDriverProgramTest, WriteFails_TimeoutAtEndOfTime)
     EXPECT_CALL(ioMock_, IoWrite(FlashRegisters::Control, FlashCommands::Write));
     EXPECT_CALL(ioMock_, IoWrite(address_, data_));
 
-    OsTime::initializeTime(0xFFFFFFFFFFFFFFFF, 500);
+    OsTime::initializeTime(0xFFFFFFFFFFFFFF00, 10500);
 
     EXPECT_CALL(ioMock_, IoRead(FlashRegisters::Status))
             .WillRepeatedly(Return(~FlashStatus::Ready));

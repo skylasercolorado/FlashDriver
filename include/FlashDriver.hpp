@@ -15,7 +15,7 @@ namespace Camax
         FlashDriver(IIo &io) : io_(io) {}
         ~FlashDriver() {}
         FlashResult Program(ioAddress address, ioData data);
-        const uint64_t Timeout = 5000; // useconds
+        const uint64_t Timeout = 2000; // useconds
 
     private:
         IIo &io_;
