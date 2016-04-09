@@ -4,10 +4,8 @@
 
 #include <FlashDriver.hpp>
 #include <OsTime.hpp>
-#include <iostream>
 
 using namespace Camax;
-using namespace std;
 
 FlashResult FlashDriver::Program(ioAddress address, ioData data)
 {
@@ -19,21 +17,8 @@ FlashResult FlashDriver::Program(ioAddress address, ioData data)
     uint64_t startTime = OsTime::GetMicroSeconds();
 
     while(!((status = io_.IoRead(FlashRegisters::Status)) & FlashStatus::Ready))
-    {
-        uint64_t currentTime = OsTime::GetMicroSeconds();
-        uint64_t diff = currentTime - startTime;
-
-        cout.setf(ios::dec, ios::basefield);
-        cout.setf(ios::showbase);
-
-        std::cout << "\ncurrentTime: " << currentTime << ". startTime: " << startTime << ".";
-        std::cout << " currentTime - startTime = " << diff << ".\n";
-
-        cout.unsetf(ios::hex);
-
-        if (diff >= Timeout)
+        if(OsTime::GetMicroSeconds() - startTime >= Timeout)
             return FlashResult::Timeout_Error;
-    }
 
     if(status & ~FlashStatus::Ready)
         return processError(status, io_);
