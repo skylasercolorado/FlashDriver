@@ -44,6 +44,6 @@ ioData FlashDriver::CfiQuery(ioAddress address)
 {
     io_.IoWrite(FlashRegisters::Control, FlashCommands::CfiQuery);
 
-    return io_.IoRead(0);
+    return io_.IoRead(address);
 }
 

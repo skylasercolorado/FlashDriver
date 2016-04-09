@@ -179,6 +179,12 @@ TEST_F(FlashDriverProgramTest, WriteFails_TimeoutAtEndOfTime)
 }
 using ::testing::_;
 using ::testing::Invoke;
+using ::testing::WithArgs;
+
+ioData dummy(ioAddress address)
+{
+    return ioData(address + 5);
+}
 
 TEST_F(FlashDriverProgramTest, ReturnMaps)
 {
@@ -192,11 +198,14 @@ TEST_F(FlashDriverProgramTest, ReturnMaps)
 
     EXPECT_CALL(ioMock_, IoWrite(FlashRegisters::Control, FlashCommands::CfiQuery));
     EXPECT_CALL(ioMock_, IoRead(_))
-            .WillRepeatedly(Invoke([&](ioAddress address)
-                                   {
-                                       return cfiData.find(address)->second;
-                                   }
-            ));
+//            .WillRepeatedly(WithArgs<0>(Invoke([&](ioAddress address)
+//                                   {
+//                                       return cfiData.find(_)->second;
+//                                   }
+//            )));
+            .WillOnce(Invoke(dummy));
 
-    EXPECT_EQ(10, flashDriver_.CfiQuery(0));
+//    EXPECT_EQ(10, flashDriver_.CfiQuery(0));
+//    EXPECT_EQ(20, flashDriver_.CfiQuery(1));
+    EXPECT_EQ(7, flashDriver_.CfiQuery(2));
 }
