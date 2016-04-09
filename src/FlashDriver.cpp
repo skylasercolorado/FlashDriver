@@ -22,12 +22,12 @@ FlashResult FlashDriver::Program(ioAddress address, ioData data)
     {
         uint64_t currentTime = OsTime::GetMicroSeconds();
 
-        cout.setf(ios::hex, ios::basefield);
+        cout.setf(ios::dec, ios::basefield);
         cout.setf(ios::showbase);
 
         std::cout << "\ncurrentTime: " << unsigned(currentTime) << ". startTime: " << unsigned(startTime) << ".";
         std::cout << " currentTime - startTime = " << unsigned(currentTime - startTime) << ".\n";
-        
+
         cout.unsetf(ios::hex);
 
         if (currentTime - startTime >= Timeout)

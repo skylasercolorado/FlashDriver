@@ -47,6 +47,8 @@ TEST_F(FlashDriverProgramTest, WriteSucceeds_ReadyImmediately)
 
 TEST_F(FlashDriverProgramTest, WriteSucceeds_NotReadyImmediately)
 {
+    OsTime::initializeTime(0, 500);
+
     EXPECT_CALL(ioMock_, IoWrite(FlashRegisters::Control, FlashCommands::Write));
     EXPECT_CALL(ioMock_, IoWrite(address_, data_));
 
@@ -129,6 +131,8 @@ TEST_F(FlashDriverProgramTest, WriteFailsReadBackError)
 
 TEST_F(FlashDriverProgramTest, WriteSucceeds_IgnoresOtherBitsUntilReady)
 {
+    OsTime::initializeTime(0, 250);
+
     EXPECT_CALL(ioMock_, IoWrite(FlashRegisters::Control, FlashCommands::Write));
     EXPECT_CALL(ioMock_, IoWrite(address_, data_));
     EXPECT_CALL(ioMock_, IoRead(FlashRegisters::Status))
@@ -151,6 +155,8 @@ TEST_F(FlashDriverProgramTest, GetTimeTest)
 
 TEST_F(FlashDriverProgramTest, WriteFails_Timeout)
 {
+    OsTime::initializeTime(0, 500);
+
     EXPECT_CALL(ioMock_, IoWrite(FlashRegisters::Control, FlashCommands::Write));
     EXPECT_CALL(ioMock_, IoWrite(address_, data_));
     EXPECT_CALL(ioMock_, IoRead(FlashRegisters::Status))
@@ -164,7 +170,7 @@ TEST_F(FlashDriverProgramTest, WriteFails_TimeoutAtEndOfTime)
     EXPECT_CALL(ioMock_, IoWrite(FlashRegisters::Control, FlashCommands::Write));
     EXPECT_CALL(ioMock_, IoWrite(address_, data_));
 
-    OsTime::initializeTime(0xFFFFFFFFFFFFFF00, 10500);
+    OsTime::initializeTime(0xFFFFFFFFFFFFFFFF, 10000);
 
     EXPECT_CALL(ioMock_, IoRead(FlashRegisters::Status))
             .WillRepeatedly(Return(~FlashStatus::Ready));
