@@ -25,8 +25,8 @@ FlashResult FlashDriver::Program(ioAddress address, ioData data)
         cout.setf(ios::dec, ios::basefield);
         cout.setf(ios::showbase);
 
-        std::cout << "\ncurrentTime: " << unsigned(currentTime) << ". startTime: " << unsigned(startTime) << ".";
-        std::cout << " currentTime - startTime = " << unsigned(currentTime - startTime) << ".\n";
+        std::cout << "\ncurrentTime: " << (currentTime) << ". startTime: " << (startTime) << ".";
+        std::cout << " currentTime - startTime = " << (currentTime - startTime) << ".\n";
 
         cout.unsetf(ios::hex);
 
