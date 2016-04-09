@@ -21,16 +21,17 @@ FlashResult FlashDriver::Program(ioAddress address, ioData data)
     while(!((status = io_.IoRead(FlashRegisters::Status)) & FlashStatus::Ready))
     {
         uint64_t currentTime = OsTime::GetMicroSeconds();
+        uint64_t diff = currentTime - startTime;
 
         cout.setf(ios::dec, ios::basefield);
         cout.setf(ios::showbase);
 
-        std::cout << "\ncurrentTime: " << (currentTime) << ". startTime: " << (startTime) << ".";
-        std::cout << " currentTime - startTime = " << (currentTime - startTime) << ".\n";
+        std::cout << "\ncurrentTime: " << currentTime << ". startTime: " << startTime << ".";
+        std::cout << " currentTime - startTime = " << diff << ".\n";
 
         cout.unsetf(ios::hex);
 
-        if (currentTime - startTime >= Timeout)
+        if (diff >= Timeout)
             return FlashResult::Timeout_Error;
     }
 
