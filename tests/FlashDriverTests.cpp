@@ -303,8 +303,6 @@ public:
                         {CfiExtendedField::QueryPChar + extendedTableAddr_, Cfi::QueryPCharReq},
                         {CfiExtendedField::Features + extendedTableAddr_,   0x66}
                 };
-
-        std::cout << "\n debug, data: " << cfiMemMock_.find(Cfi::Manufacturer)->second << ". \n";
     }
 
     static vector<PatternTestParams> GetParameters()
@@ -339,7 +337,6 @@ TEST_P(FlashDriverPatternTests, CfiFieldsReturnsOk2)
                 }));
     }
 
-    std::cout << "\n address: " << params_.address << ". data: " << params_.data << ". \n";
     EXPECT_EQ(params_.data , flashDriver_.CfiRead(params_.address));
 }
 
