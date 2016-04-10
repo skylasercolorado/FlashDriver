@@ -204,3 +204,31 @@ TEST_F(FlashDriverProgramTest, ReturnMaps)
     EXPECT_EQ(20, flashDriver_.CfiQuery(1));
     EXPECT_EQ(30, flashDriver_.CfiQuery(2));
 }
+
+using ::testing::Sequence;
+
+TEST_F(FlashDriverProgramTest, ReturnMapsStrictOrder)
+{
+    typedef std::map<ioAddress, ioData> CfiData;
+
+    CfiData cfiData;
+
+    cfiData.insert(std::make_pair<ioAddress, ioData>(0, 10));
+    cfiData.insert(std::make_pair<ioAddress, ioData>(1, 20));
+    cfiData.insert(std::make_pair<ioAddress, ioData>(2, 30));
+
+    Sequence s;
+
+    EXPECT_CALL(ioMock_, IoWrite(FlashRegisters::Control, FlashCommands::CfiQuery))
+            .Times(AnyNumber())
+            .InSequence(s);
+    EXPECT_CALL(ioMock_, IoRead(_))
+            .InSequence(s)
+            .WillRepeatedly(Invoke([&](ioAddress address)
+                                   {
+                                       return cfiData.find(address)->second;
+                                   }
+            ));
+
+    EXPECT_EQ(30, flashDriver_.CfiQuery(2));
+}
