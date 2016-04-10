@@ -270,8 +270,8 @@ TEST_F(FlashDriverProgramTest, CfiFieldsReturnsOk)
     EXPECT_EQ(Cfi::Manufacturers::St, flashDriver_.CfiRead(CfiField::Manufacturer));
     EXPECT_NE(Cfi::VppMinReq + 1, flashDriver_.CfiRead(CfiVoltages::VppMin));
     EXPECT_EQ(Cfi::VppMinReq, flashDriver_.CfiRead(CfiVoltages::VppMin));
-    EXPECT_NE('R', flashDriver_.CfiRead(CfiExtendedField::QueryPChar));
-    EXPECT_EQ('P', flashDriver_.CfiRead(CfiExtendedField::QueryPChar));
-    EXPECT_TRUE(flashDriver_.CfiRead(CfiExtendedField::Features) & SupportedFeatures::SuspendErase);
-    EXPECT_FALSE(flashDriver_.CfiRead(CfiExtendedField::Features) & SupportedFeatures::ChipErase);
+    EXPECT_NE(Cfi::QueryQCharReq, flashDriver_.CfiRead(CfiExtendedField::QueryPChar));
+    EXPECT_EQ(Cfi::QueryPCharReq, flashDriver_.CfiRead(CfiExtendedField::QueryPChar));
+    EXPECT_TRUE(flashDriver_.CfiRead(CfiExtendedField::Features) & Cfi::SupportedFeatures::SuspendErase);
+    EXPECT_FALSE(flashDriver_.CfiRead(CfiExtendedField::Features) & Cfi::SupportedFeatures::ChipErase);
 }
