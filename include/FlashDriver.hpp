@@ -6,6 +6,7 @@
 #define FLASHDRIVER_FLASHDRIVER_HPP
 
 #include "IIo.hpp"
+#include "Cfi.hpp"
 
 namespace Camax
 {
@@ -16,6 +17,7 @@ namespace Camax
         ~FlashDriver() {}
         FlashResult Program(ioAddress address, ioData data);
         ioData CfiRead(ioAddress address);
+        ioData CfiRead(CfiField address);
 
         const uint64_t Timeout = 2000; // useconds
 
