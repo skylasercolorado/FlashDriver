@@ -285,17 +285,14 @@ struct PatternTestParams
     ioData data;
 };
 
-
-ioAddress var1 = Cfi::Manufacturer;
-
-PatternTestParams hello = {Cfi::Manufacturer,     Cfi::Manufacturers::St};
-
 vector<PatternTestParams> GetParameters()
 {
+    ioAddress extendedTableAddr = 0x35;
+
     vector<PatternTestParams> paramTest1 =
             {
-                    {CfiField::Manufacturer,            Cfi::Manufacturers::St},
-                    {CfiExtendedField::QueryPChar,      Cfi::QueryPCharReq}
+                    {CfiField::Manufacturer,                                Cfi::Manufacturers::St},
+                    {CfiExtendedField::QueryPChar + extendedTableAddr,      Cfi::QueryPCharReq}
             };
     return paramTest1;
 }
@@ -305,6 +302,8 @@ class FlashDriverPatternTests : public FlashDriverProgramTest, public ::testing:
 public:
     virtual void SetUp()
     {
+        params_ = GetParam();
+
         extendedTableAddr_ = 0x35;
 
         cfiMemMock_ =
@@ -317,7 +316,6 @@ public:
                         {CfiExtendedField::Features + extendedTableAddr_,   0x66}
                 };
 
-        params_ = GetParam();
         std::cout << "\n debug, data: " << cfiMemMock_.find(Cfi::Manufacturer)->second << ". \n";
     }
 
