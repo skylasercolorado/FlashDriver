@@ -16,7 +16,7 @@ namespace Camax
         DeviceCode              = 1,
         QueryQChar              = 0x10,
         DeviceSize              = 0x27,
-        ExtendedTableAddress    = 0x15
+        ExtendedTableOffset     = 0x15
     };
 
     enum CfiVoltages : ioAddress
@@ -58,7 +58,7 @@ namespace Camax
 //            {
 //                    {Manufacturer,          St},
 //                    {QueryQChar,            'Q'},
-//                    {ExtendedTableAddress,  extendedTableAddr}
+//                    {ExtendedTableOffset,  extendedTableAddr}
 //            };
 //
 //    CfiMem extMem =
@@ -70,7 +70,7 @@ namespace Camax
 //            {
 //                    {CfiField::Manufacturer,                            St},
 //                    {CfiField::QueryQChar,                              'Q'},
-//                    {CfiField::ExtendedTableAddress,                    extendedTableAddr},
+//                    {CfiField::ExtendedTableOffset,                    extendedTableAddr},
 //                    {CfiExtendedField::QueryPChar + extendedTableAddr,     'P'}
 //            };
 }

@@ -28,7 +28,7 @@ public:
                     {CfiField::Manufacturer,                            St},
                     {CfiField::QueryQChar,                              'Q'},
                     {CfiVoltages::VppMin,                               0x27},
-                    {CfiField::ExtendedTableAddress,                    extendedTableAddr_},
+                    {CfiField::ExtendedTableOffset,                    extendedTableAddr_},
                     {CfiExtendedField::QueryPChar + extendedTableAddr_, 'P'}
                 };
     }
@@ -257,4 +257,6 @@ TEST_F(FlashDriverProgramTest, CfiFieldsReturnsOk)
     EXPECT_EQ(Manufacturers::St, flashDriver_.CfiRead(CfiField::Manufacturer));
     EXPECT_NE(2.9, flashDriver_.CfiRead(CfiVoltages::VppMin));
     EXPECT_EQ(2.7, flashDriver_.CfiRead(CfiVoltages::VppMin));
+    EXPECT_NE('R', flashDriver_.CfiRead(CfiExtendedField::QueryPChar));
+    EXPECT_EQ('P', flashDriver_.CfiRead(CfiExtendedField::QueryPChar));
 }

@@ -61,3 +61,11 @@ double FlashDriver::CfiRead(CfiVoltages address)
 
     return decodedVoltage;
 }
+
+ioData FlashDriver::CfiRead(CfiExtendedField address)
+{
+    ioAddress extendedTableOffset = CfiRead(CfiField::ExtendedTableOffset);
+
+    return CfiRead(extendedTableOffset + ioAddress(address));
+}
+
