@@ -285,15 +285,20 @@ struct PatternTestParams
     ioData data;
 };
 
-vector<PatternTestParams> paramTest1 =
-        {
-                {Cfi::Manufacturer,     Cfi::Manufacturers::St},
-                {Cfi::QueryPChar,       Cfi::QueryPCharReq}
-        };
 
 ioAddress var1 = Cfi::Manufacturer;
 
 PatternTestParams hello = {Cfi::Manufacturer,     Cfi::Manufacturers::St};
+
+vector<PatternTestParams> GetParameters()
+{
+    vector<PatternTestParams> paramTest1 =
+            {
+                    {Cfi::Manufacturer,     Cfi::Manufacturers::St},
+                    {Cfi::QueryPChar,       Cfi::QueryPCharReq}
+            };
+    return paramTest1;
+}
 
 class FlashDriverPatternTests : public FlashDriverProgramTest, public ::testing::WithParamInterface<PatternTestParams>
 {
@@ -306,7 +311,7 @@ public:
     PatternTestParams params_;
 };
 
-INSTANTIATE_TEST_CASE_P(PositiveAndNEgative, FlashDriverPatternTests, ::testing::Values(hello));
+INSTANTIATE_TEST_CASE_P(PositiveAndNEgative, FlashDriverPatternTests, ::testing::ValuesIn(GetParameters()));
 
 TEST_P(FlashDriverPatternTests, CfiFieldsReturnsOk2)
 {
@@ -318,6 +323,7 @@ TEST_P(FlashDriverPatternTests, CfiFieldsReturnsOk2)
                                        return cfiMemMock_.find(address)->second;
                                    }));
 
+    std::cout << "\n address: " << params_.address << ". data: " << params_.data << ". \n";
     EXPECT_EQ(params_.data , flashDriver_.CfiRead(params_.address));
 }
 
