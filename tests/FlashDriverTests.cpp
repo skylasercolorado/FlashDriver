@@ -22,6 +22,14 @@ public:
     {
         address_ = 0x1000;
         data_ = 0xBEEF;
+
+        cfiMemMock_ =
+                {
+                    {CfiField::Manufacturer,                            St},
+                    {CfiField::QueryQChar,                              'Q'},
+                    {CfiField::ExtendedTableAddress,                    extendedTableAddr_},
+                    {CfiExtendedField::QueryPChar + extendedTableAddr_, 'P'}
+                };
     }
 
     virtual void TearDown()
@@ -31,6 +39,8 @@ public:
     FlashDriver flashDriver_;
     ioAddress address_;
     ioData data_;
+    CfiMem cfiMemMock_;
+    const ioAddress extendedTableAddr_ = 0x35;
 };
 
 TEST_F(FlashDriverProgramTest, WriteSucceeds_ReadyImmediately)
@@ -231,4 +241,16 @@ TEST_F(FlashDriverProgramTest, ReturnMapsStrictOrder)
             ));
 
     EXPECT_EQ(30, flashDriver_.CfiRead(2));
+}
+
+TEST_F(FlashDriverProgramTest, CfiFieldsReturnsOk)
+{
+    EXPECT_CALL(ioMock_, IoWrite(FlashRegisters::Control, FlashCommands::CfiQuery));
+    EXPECT_CALL(ioMock_, IoRead(_))
+                .WillOnce(Invoke([&](ioAddress address)
+                                 {
+                                     return cfiMemMock_.find(address)->second;
+                                 }));
+
+    EXPECT_EQ(Manufacturers::St, flashDriver_.CfiRead(CfiField::Manufacturer));
 }

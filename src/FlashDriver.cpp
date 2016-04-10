@@ -47,3 +47,7 @@ ioData FlashDriver::CfiRead(ioAddress address)
     return io_.IoRead(address);
 }
 
+ioData FlashDriver::CfiRead(CfiField address)
+{
+    return CfiRead(ioAddress(address));
+}
