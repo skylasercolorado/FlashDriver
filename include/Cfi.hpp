@@ -48,15 +48,26 @@ namespace Camax
 
     typedef std::map<ioAddress, ioData> CfiMem;
 
+    const ioAddress extendedTableAddr = 0x35;
+
     CfiMem cfiMem =
             {
                     {Manufacturer,          St},
-                    {QueryQChar,            'Q'}
+                    {QueryQChar,            'Q'},
+                    {ExtendedTableAddress,  extendedTableAddr}
             };
 
     CfiMem extMem =
             {
                     {QueryPChar,            'P'}
+            };
+
+    CfiMem mock =
+            {
+                    {CfiField::Manufacturer,                            St},
+                    {CfiField::QueryQChar,                              'Q'},
+                    {CfiField::ExtendedTableAddress,                    extendedTableAddr},
+                    {ExtendedField::QueryPChar + extendedTableAddr,     'P'}
             };
 }
 
