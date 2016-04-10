@@ -27,6 +27,7 @@ public:
                 {
                     {CfiField::Manufacturer,                            St},
                     {CfiField::QueryQChar,                              'Q'},
+                    {CfiVoltages::VppMin,                               0x27},
                     {CfiField::ExtendedTableAddress,                    extendedTableAddr_},
                     {CfiExtendedField::QueryPChar + extendedTableAddr_, 'P'}
                 };
@@ -245,12 +246,14 @@ TEST_F(FlashDriverProgramTest, ReturnMapsStrictOrder)
 
 TEST_F(FlashDriverProgramTest, CfiFieldsReturnsOk)
 {
-    EXPECT_CALL(ioMock_, IoWrite(FlashRegisters::Control, FlashCommands::CfiQuery));
+    EXPECT_CALL(ioMock_, IoWrite(FlashRegisters::Control, FlashCommands::CfiQuery))
+            .Times(AnyNumber());
     EXPECT_CALL(ioMock_, IoRead(_))
-                .WillOnce(Invoke([&](ioAddress address)
+                .WillRepeatedly(Invoke([&](ioAddress address)
                                  {
                                      return cfiMemMock_.find(address)->second;
                                  }));
 
     EXPECT_EQ(Manufacturers::St, flashDriver_.CfiRead(CfiField::Manufacturer));
+    EXPECT_EQ(2.7, flashDriver_.CfiRead(CfiVoltages::VppMin));
 }

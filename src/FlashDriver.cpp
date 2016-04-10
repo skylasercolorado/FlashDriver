@@ -51,3 +51,13 @@ ioData FlashDriver::CfiRead(CfiField address)
 {
     return CfiRead(ioAddress(address));
 }
+
+double FlashDriver::CfiRead(CfiVoltages address)
+{
+    ioData codedVoltage = CfiRead(ioAddress(address));
+
+    double decodedVoltage = ((codedVoltage & 0x000F) * 0.1) +
+                            (((codedVoltage & 0x00F0) >> 4) * 1.0);
+
+    return decodedVoltage;
+}
