@@ -23,6 +23,8 @@ public:
         address_ = 0x1000;
         data_ = 0xBEEF;
 
+        extendedTableAddr_ = 0x35;
+
         cfiMemMock_ =
                 {
                     {CfiField::Manufacturer,                            St},
@@ -42,7 +44,7 @@ public:
     ioAddress address_;
     ioData data_;
     CfiMem cfiMemMock_;
-    const ioAddress extendedTableAddr_ = 0x35;
+    ioAddress extendedTableAddr_;
 };
 
 TEST_F(FlashDriverProgramTest, WriteSucceeds_ReadyImmediately)
