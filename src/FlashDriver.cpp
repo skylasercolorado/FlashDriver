@@ -40,7 +40,7 @@ FlashResult FlashDriver::processError(ioData &status, IIo &io)
         return FlashResult::Unknown_Error;
 }
 
-ioData FlashDriver::CfiQuery(ioAddress address)
+ioData FlashDriver::CfiRead(ioAddress address)
 {
     io_.IoWrite(FlashRegisters::Control, FlashCommands::CfiQuery);
 

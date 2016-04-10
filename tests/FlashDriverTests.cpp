@@ -200,9 +200,9 @@ TEST_F(FlashDriverProgramTest, ReturnMaps)
                                    }
             ));
 
-    EXPECT_EQ(10, flashDriver_.CfiQuery(0));
-    EXPECT_EQ(20, flashDriver_.CfiQuery(1));
-    EXPECT_EQ(30, flashDriver_.CfiQuery(2));
+    EXPECT_EQ(10, flashDriver_.CfiRead(0));
+    EXPECT_EQ(20, flashDriver_.CfiRead(1));
+    EXPECT_EQ(30, flashDriver_.CfiRead(2));
 }
 
 using ::testing::Sequence;
@@ -230,5 +230,5 @@ TEST_F(FlashDriverProgramTest, ReturnMapsStrictOrder)
                                    }
             ));
 
-    EXPECT_EQ(30, flashDriver_.CfiQuery(2));
+    EXPECT_EQ(30, flashDriver_.CfiRead(2));
 }
