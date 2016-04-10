@@ -37,7 +37,7 @@ namespace Camax
         Bottom                  = 0x88CF
     };
 
-    enum ExtendedField : ioAddress
+    enum CfiExtendedField : ioAddress
     {
         QueryPChar              = 0,
         Features                = 5
@@ -71,7 +71,7 @@ namespace Camax
 //                    {CfiField::Manufacturer,                            St},
 //                    {CfiField::QueryQChar,                              'Q'},
 //                    {CfiField::ExtendedTableAddress,                    extendedTableAddr},
-//                    {ExtendedField::QueryPChar + extendedTableAddr,     'P'}
+//                    {CfiExtendedField::QueryPChar + extendedTableAddr,     'P'}
 //            };
 }
 

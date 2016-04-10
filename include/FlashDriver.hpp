@@ -18,6 +18,8 @@ namespace Camax
         FlashResult Program(ioAddress address, ioData data);
         ioData CfiRead(ioAddress address);
         ioData CfiRead(CfiField address);
+        ioData CfiRead(CfiVoltages address);
+        ioData CfiRead(CfiExtendedField address);
 
         const uint64_t Timeout = 2000; // useconds
 
