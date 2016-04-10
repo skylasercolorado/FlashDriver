@@ -285,6 +285,20 @@ struct PatternTestParams
     ioData data;
 };
 
+ioAddress extendedTableAddr = 0x35;
+
+vector<PatternTestParams> GetParameters()
+{
+    ioAddress extendedTableAddr_ = extendedTableAddr;
+
+    vector<PatternTestParams> paramTest1 =
+            {
+                    {CfiField::Manufacturer,                                Cfi::Manufacturers::St},
+                    {CfiExtendedField::QueryPChar + extendedTableAddr_,      Cfi::QueryPCharReq}
+            };
+    return paramTest1;
+}
+
 class FlashDriverPatternTests : public FlashDriverProgramTest, public ::testing::WithParamInterface<PatternTestParams>
 {
 public:
@@ -292,7 +306,7 @@ public:
     {
         params_ = GetParam();
 
-        extendedTableAddr_ = 0x35;
+        extendedTableAddr_ = extendedTableAddr;
 
         cfiMemMock_ =
                 {
@@ -305,22 +319,10 @@ public:
                 };
     }
 
-    static vector<PatternTestParams> GetParameters()
-    {
-        ioAddress extendedTableAddr = 0x35;
-
-        vector<PatternTestParams> paramTest1 =
-                {
-                        {CfiField::Manufacturer,                                Cfi::Manufacturers::St},
-                        {CfiExtendedField::QueryPChar + extendedTableAddr,      Cfi::QueryPCharReq}
-                };
-        return paramTest1;
-    }
-
     PatternTestParams params_;
 };
 
-INSTANTIATE_TEST_CASE_P(PositiveAndNEgative, FlashDriverPatternTests, ::testing::ValuesIn(FlashDriverPatternTests::GetParameters()));
+INSTANTIATE_TEST_CASE_P(PositiveAndNegative, FlashDriverPatternTests, ::testing::ValuesIn(GetParameters()));
 
 using ::testing::InSequence;
 
