@@ -7,10 +7,13 @@
 #include <OsTime.hpp>
 #include "gtest/gtest.h"
 #include "gmock/gmock.h"
+#include <vector>
 
 using namespace Camax;
 using ::testing::AtLeast;
 using ::testing::Return;
+using ::testing::TestWithParam;
+using std::vector;
 
 ioData EncodeVoltage(double voltage)
 {
@@ -22,9 +25,9 @@ ioData EncodeVoltage(double voltage)
 
 class FlashDriverProgramTest : public ::testing::Test
 {
+public:
     typedef std::map<ioAddress, ioData> CfiMem;
 
-public:
     FlashDriverProgramTest() : flashDriver_(ioMock_)
     {}
 
@@ -275,3 +278,46 @@ TEST_F(FlashDriverProgramTest, CfiFieldsReturnsOk)
     EXPECT_TRUE(flashDriver_.CfiRead(CfiExtendedField::Features) & Cfi::SupportedFeatures::SuspendErase);
     EXPECT_FALSE(flashDriver_.CfiRead(CfiExtendedField::Features) & Cfi::SupportedFeatures::ChipErase);
 }
+
+struct PatternTestParams
+{
+    ioAddress address;
+    ioData data;
+};
+
+vector<PatternTestParams> paramTest1 =
+        {
+                {Cfi::Manufacturer,     Cfi::Manufacturers::St},
+                {Cfi::QueryPChar,       Cfi::QueryPCharReq}
+        };
+
+ioAddress var1 = Cfi::Manufacturer;
+
+PatternTestParams hello = {Cfi::Manufacturer,     Cfi::Manufacturers::St};
+
+class FlashDriverPatternTests : public FlashDriverProgramTest, public ::testing::WithParamInterface<PatternTestParams>
+{
+public:
+    virtual void SetUp()
+    {
+        params_ = GetParam();
+    }
+
+    PatternTestParams params_;
+};
+
+INSTANTIATE_TEST_CASE_P(PositiveAndNEgative, FlashDriverPatternTests, ::testing::Values(hello));
+
+TEST_P(FlashDriverPatternTests, CfiFieldsReturnsOk2)
+{
+    EXPECT_CALL(ioMock_, IoWrite(FlashRegisters::Control, FlashCommands::CfiQuery))
+            .Times(AnyNumber());
+    EXPECT_CALL(ioMock_, IoRead(_))
+            .WillRepeatedly(Invoke([&](ioAddress address)
+                                   {
+                                       return cfiMemMock_.find(address)->second;
+                                   }));
+
+    EXPECT_EQ(params_.data , flashDriver_.CfiRead(params_.address));
+}
+
