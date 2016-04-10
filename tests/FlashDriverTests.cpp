@@ -294,8 +294,8 @@ vector<PatternTestParams> GetParameters()
 {
     vector<PatternTestParams> paramTest1 =
             {
-                    {Cfi::Manufacturer,     Cfi::Manufacturers::St},
-                    {Cfi::QueryPChar,       Cfi::QueryPCharReq}
+                    {CfiField::Manufacturer,            Cfi::Manufacturers::St},
+                    {CfiExtendedField::QueryPChar,      Cfi::QueryPCharReq}
             };
     return paramTest1;
 }
@@ -305,7 +305,20 @@ class FlashDriverPatternTests : public FlashDriverProgramTest, public ::testing:
 public:
     virtual void SetUp()
     {
+        extendedTableAddr_ = 0x35;
+
+        cfiMemMock_ =
+                {
+                        {CfiField::Manufacturer,                            Cfi::Manufacturers::St},
+                        {CfiField::QueryQChar,                              Cfi::QueryQCharReq},
+                        {CfiVoltages::VppMin,                               EncodeVoltage(Cfi::VppMinReq)},
+                        {CfiField::ExtendedTableOffset,                     extendedTableAddr_},
+                        {CfiExtendedField::QueryPChar + extendedTableAddr_, Cfi::QueryPCharReq},
+                        {CfiExtendedField::Features + extendedTableAddr_,   0x66}
+                };
+
         params_ = GetParam();
+        std::cout << "\n debug, data: " << cfiMemMock_.find(Cfi::Manufacturer)->second << ". \n";
     }
 
     PatternTestParams params_;
