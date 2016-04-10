@@ -53,12 +53,12 @@ namespace Camax
             Bottom = 0x88CF
         };
 
-        const ioData QueryQCharReq = 'Q';
-        const double VppMinReq = 11.4;
-        const double VppMaxReq = 12.6;
+        const ioData QueryQCharReq      = 'Q';
+        const double VppMinReq          = 11.4;
+        const double VppMaxReq          = 12.6;
 
-        const double VddMinReq = 2.7;
-        const double VddMaxReq = 3.6;
+        const double VddMinReq          = 2.7;
+        const double VddMaxReq          = 3.6;
 
         const ioData QueryPCharReq = 'P';
     }
