@@ -255,5 +255,6 @@ TEST_F(FlashDriverProgramTest, CfiFieldsReturnsOk)
                                  }));
 
     EXPECT_EQ(Manufacturers::St, flashDriver_.CfiRead(CfiField::Manufacturer));
+    EXPECT_NE(2.9, flashDriver_.CfiRead(CfiVoltages::VppMin));
     EXPECT_EQ(2.7, flashDriver_.CfiRead(CfiVoltages::VppMin));
 }
