@@ -324,15 +324,20 @@ public:
 
 INSTANTIATE_TEST_CASE_P(PositiveAndNEgative, FlashDriverPatternTests, ::testing::ValuesIn(GetParameters()));
 
+using ::testing::InSequence;
+
 TEST_P(FlashDriverPatternTests, CfiFieldsReturnsOk2)
 {
-    EXPECT_CALL(ioMock_, IoWrite(FlashRegisters::Control, FlashCommands::CfiQuery))
-            .Times(AnyNumber());
-    EXPECT_CALL(ioMock_, IoRead(_))
-            .WillRepeatedly(Invoke([&](ioAddress address)
-                                   {
-                                       return cfiMemMock_.find(address)->second;
-                                   }));
+    {
+        InSequence s;
+
+        EXPECT_CALL(ioMock_, IoWrite(FlashRegisters::Control, FlashCommands::CfiQuery))
+                .Times(AnyNumber());
+        EXPECT_CALL(ioMock_, IoRead(_))
+                .WillRepeatedly(Invoke([&](ioAddress address) {
+                    return cfiMemMock_.find(address)->second;
+                }));
+    }
 
     std::cout << "\n address: " << params_.address << ". data: " << params_.data << ". \n";
     EXPECT_EQ(params_.data , flashDriver_.CfiRead(params_.address));
