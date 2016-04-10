@@ -5,13 +5,16 @@
 #ifndef FLASHDRIVER_CFI_HPP
 #define FLASHDRIVER_CFI_HPP
 
+#include <map>
+#include "IIo.hpp"
+
 namespace Camax
 {
     enum CfiField : ioAddress
     {
         Manufacturer            = 0,
         DeviceCode              = 1,
-        QueryStringQ            = 0x10,
+        QueryQChar              = 0x10,
         VddMin                  = 0x1B,
         VppMin                  = 0x1D,
         DeviceSize              = 0x27,
@@ -32,7 +35,7 @@ namespace Camax
 
     enum ExtendedField : ioAddress
     {
-        QueryStringP            = 0,
+        QueryPChar              = 0,
         Features                = 5
     };
 
@@ -47,13 +50,13 @@ namespace Camax
 
     CfiMem cfiMem =
             {
-                    {Manufacturer,          0x20},
-                    {QueryStringQ,          0x51}
+                    {Manufacturer,          St},
+                    {QueryQChar,            'Q'}
             };
 
-    CfiMem extQueryMem =
+    CfiMem extMem =
             {
-                    {QueryStringP,          0x50}
+                    {QueryPChar,            'P'}
             };
 }
 
