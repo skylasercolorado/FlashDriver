@@ -8,6 +8,8 @@
 #include "IIo.hpp"
 #include "Cfi.hpp"
 
+using namespace Camax::Cfi;
+
 namespace Camax
 {
     class FlashDriver

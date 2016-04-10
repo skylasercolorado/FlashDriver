@@ -12,8 +12,18 @@ using namespace Camax;
 using ::testing::AtLeast;
 using ::testing::Return;
 
+ioData EncodeVoltage(double voltage)
+{
+    ioData bcdVoltage = ioData(voltage);
+    ioData fractionVoltage = ioData((voltage - double(bcdVoltage)) * 10);
+
+    return bcdVoltage << 4 | fractionVoltage;
+}
+
 class FlashDriverProgramTest : public ::testing::Test
 {
+    typedef std::map<ioAddress, ioData> CfiMem;
+
 public:
     FlashDriverProgramTest() : flashDriver_(ioMock_)
     {}
@@ -27,11 +37,11 @@ public:
 
         cfiMemMock_ =
                 {
-                    {CfiField::Manufacturer,                            St},
-                    {CfiField::QueryQChar,                              'Q'},
-                    {CfiVoltages::VppMin,                               0x27},
+                    {CfiField::Manufacturer,                            Cfi::Manufacturers::St},
+                    {CfiField::QueryQChar,                              Cfi::QueryQCharReq},
+                    {CfiVoltages::VppMin,                               EncodeVoltage(Cfi::VppMinReq)},
                     {CfiField::ExtendedTableOffset,                     extendedTableAddr_},
-                    {CfiExtendedField::QueryPChar + extendedTableAddr_, 'P'},
+                    {CfiExtendedField::QueryPChar + extendedTableAddr_, Cfi::QueryPCharReq},
                     {CfiExtendedField::Features + extendedTableAddr_,   0x66}
                 };
     }
@@ -257,9 +267,9 @@ TEST_F(FlashDriverProgramTest, CfiFieldsReturnsOk)
                                      return cfiMemMock_.find(address)->second;
                                  }));
 
-    EXPECT_EQ(Manufacturers::St, flashDriver_.CfiRead(CfiField::Manufacturer));
-    EXPECT_NE(2.9, flashDriver_.CfiRead(CfiVoltages::VppMin));
-    EXPECT_EQ(2.7, flashDriver_.CfiRead(CfiVoltages::VppMin));
+    EXPECT_EQ(Cfi::Manufacturers::St, flashDriver_.CfiRead(CfiField::Manufacturer));
+    EXPECT_NE(Cfi::VppMinReq + 1, flashDriver_.CfiRead(CfiVoltages::VppMin));
+    EXPECT_EQ(Cfi::VppMinReq, flashDriver_.CfiRead(CfiVoltages::VppMin));
     EXPECT_NE('R', flashDriver_.CfiRead(CfiExtendedField::QueryPChar));
     EXPECT_EQ('P', flashDriver_.CfiRead(CfiExtendedField::QueryPChar));
     EXPECT_TRUE(flashDriver_.CfiRead(CfiExtendedField::Features) & SupportedFeatures::SuspendErase);
