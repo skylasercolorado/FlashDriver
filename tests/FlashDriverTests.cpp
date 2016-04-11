@@ -349,3 +349,25 @@ TEST_P(FlashDriverPatternTests, RegularOverload)
     EXPECT_EQ(params_.data , flashDriver_.CfiRead(params_.address));
 }
 
+template<class T>
+struct foo_test : public ::testing::Test {
+    static std::vector<T> _range_;
+};
+
+TYPED_TEST_CASE_P(foo_test);
+
+TYPED_TEST_P(foo_test, IsGreaterThanZero) {
+    for (TypeParam value : foo_test<TypeParam>::_range_) {
+        EXPECT_GT(value,0);
+    }
+}
+
+REGISTER_TYPED_TEST_CASE_P(foo_test,IsGreaterThanZero);
+
+typedef ::testing::Types<char, int, float> MyTypes;
+INSTANTIATE_TYPED_TEST_CASE_P(My, foo_test, MyTypes);
+
+template<> std::vector<char> foo_test<char>::_range_{'1','2','3'};
+template<> std::vector<int> foo_test<int>::_range_{1,2,3};
+template<> std::vector<float> foo_test<float>::_range_{1.1,2.2,7.0};
+
