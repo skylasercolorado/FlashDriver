@@ -279,19 +279,20 @@ TEST_F(FlashDriverProgramTest, CfiFieldsReturnsOk)
     EXPECT_FALSE(flashDriver_.CfiRead(CfiExtendedField::Features) & Cfi::SupportedFeatures::ChipErase);
 }
 
+template <typename T1, typename T2>
 struct PatternTestParams
 {
-    ioAddress address;
-    ioData data;
+    T1 address;
+    T2 data;
 };
 
 ioAddress extendedTableAddr = 0x35;
 
-vector<PatternTestParams> GetParameters()
+vector<PatternTestParams<ioAddress, ioData>> GetParameters()
 {
     ioAddress extendedTableAddr_ = extendedTableAddr;
 
-    vector<PatternTestParams> paramTest1 =
+    vector<PatternTestParams<ioAddress, ioData>> paramTest1 =
             {
                     {CfiField::Manufacturer,                                Cfi::Manufacturers::St},
                     {CfiExtendedField::QueryPChar + extendedTableAddr_,      Cfi::QueryPCharReq}
@@ -299,7 +300,7 @@ vector<PatternTestParams> GetParameters()
     return paramTest1;
 }
 
-class FlashDriverPatternTests : public FlashDriverProgramTest, public ::testing::WithParamInterface<PatternTestParams>
+class FlashDriverPatternTests : public FlashDriverProgramTest, public ::testing::WithParamInterface<PatternTestParams<ioAddress, ioData>>
 {
 public:
     virtual void SetUp()
@@ -319,7 +320,7 @@ public:
                 };
     }
 
-    PatternTestParams params_;
+    PatternTestParams<ioAddress, ioData> params_;
 };
 
 INSTANTIATE_TEST_CASE_P(PositiveAndNegative, FlashDriverPatternTests, ::testing::ValuesIn(GetParameters()));
