@@ -293,11 +293,12 @@ typedef PatternTestParams<CfiExtendedField, ioData> TestParamsCfiExtendedFieldOv
 
 ioAddress extendedTableAddr = 0x35;
 
-vector<TestParamsRegularOverload> GetParameters()
+template <typename T>
+vector<T> GetParameters()
 {
     ioAddress extendedTableAddr_ = extendedTableAddr;
 
-    vector<TestParamsRegularOverload> paramTest1 =
+    vector<T> paramTest1 =
             {
                     {CfiField::Manufacturer,                                Cfi::Manufacturers::St},
                     {CfiExtendedField::QueryPChar + extendedTableAddr_,      Cfi::QueryPCharReq}
@@ -328,7 +329,7 @@ public:
     TestParamsRegularOverload params_;
 };
 
-INSTANTIATE_TEST_CASE_P(PositiveAndNegative, FlashDriverPatternTests, ::testing::ValuesIn(GetParameters()));
+INSTANTIATE_TEST_CASE_P(PositiveAndNegative, FlashDriverPatternTests, ::testing::ValuesIn(GetParameters<TestParamsRegularOverload>()));
 
 using ::testing::InSequence;
 
