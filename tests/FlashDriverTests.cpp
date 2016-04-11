@@ -286,13 +286,15 @@ struct PatternTestParams
     T2 data;
 };
 
+typedef PatternTestParams<ioAddress, ioData> TestParamsFirstOverload;
+
 ioAddress extendedTableAddr = 0x35;
 
-vector<PatternTestParams<ioAddress, ioData>> GetParameters()
+vector<TestParamsFirstOverload> GetParameters()
 {
     ioAddress extendedTableAddr_ = extendedTableAddr;
 
-    vector<PatternTestParams<ioAddress, ioData>> paramTest1 =
+    vector<TestParamsFirstOverload> paramTest1 =
             {
                     {CfiField::Manufacturer,                                Cfi::Manufacturers::St},
                     {CfiExtendedField::QueryPChar + extendedTableAddr_,      Cfi::QueryPCharReq}
@@ -300,7 +302,7 @@ vector<PatternTestParams<ioAddress, ioData>> GetParameters()
     return paramTest1;
 }
 
-class FlashDriverPatternTests : public FlashDriverProgramTest, public ::testing::WithParamInterface<PatternTestParams<ioAddress, ioData>>
+class FlashDriverPatternTests : public FlashDriverProgramTest, public ::testing::WithParamInterface<TestParamsFirstOverload>
 {
 public:
     virtual void SetUp()
@@ -320,14 +322,14 @@ public:
                 };
     }
 
-    PatternTestParams<ioAddress, ioData> params_;
+    TestParamsFirstOverload params_;
 };
 
 INSTANTIATE_TEST_CASE_P(PositiveAndNegative, FlashDriverPatternTests, ::testing::ValuesIn(GetParameters()));
 
 using ::testing::InSequence;
 
-TEST_P(FlashDriverPatternTests, CfiFieldsReturnsOk2)
+TEST_P(FlashDriverPatternTests, RegularOverload)
 {
     {
         InSequence s;
